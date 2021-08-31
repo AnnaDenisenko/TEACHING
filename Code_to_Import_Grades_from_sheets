@@ -1,0 +1,26 @@
+function sendEmails() {
+  var sheet = SpreadsheetApp.getActiveSheet(); 
+  // Instead of using DataFrame-js in JavaScript, I prefer to create two
+  // 'dataframes', one to fetch grades, another to fetch not-grades-related information.
+  // Fetch other info sheet.getRange(start row, start column, number of rows, number of columns):
+  var dataRange = sheet.getRange(1, 1, 23, 12);
+  var other_info = dataRange.getValues();
+  // Fetch only grades:
+  var dataRange = sheet.getRange(1, 4, 23, 8);
+  var grades = dataRange.getValues();
+  // The first two rows contain features (max grades for each problem, problems' labels)
+  for (var i=3; i <= 20; i = i + 1) {
+    var row = other_info[i];    // Fetch a row (a student's results)
+    var name_s = row[0];        // Fetch name of a student
+    var emailAddress = row[1];  // Fetch email
+    var comment = row[2];       // My comment (text or a link to graded pdf)
+    var questions = grades[0];  // The problem's label
+    var results = grades[i];    // Points for every problem for every student
+    var sum = row[11];          // Sum of Point
+    // Message that the students will see:
+    var message = 'name: ' + name_s+'\n'+'\n' + 'questions: ' + questions+'\n'+'\n'+'results:     ' + results +'\n'+'\n' + 'sum of your results: '+sum+' out of 10'+'\n'+'\n'+'maximum: '+ data_2[1]+'\n'+'\n'+ 'comment: ' + comment;
+    // Subject line:    
+    var subject = 'HW9_GRADED: AUTOMATED MESSAGE';
+    MailApp.sendEmail(emailAddress, subject, message);
+  }
+}
